@@ -3,6 +3,8 @@ import os
 import pytube
 from pytube import YouTube
 
+cli_version="Alpha 0.3.0"
+
 def clearconsole():
     os.system("cls")
 def cli_main():
@@ -11,17 +13,23 @@ def cli_main():
     playlist = ""
     url = ""
     
-    if "playlist" not in preurl:
+    playlist_ids = ['playlist', 'list']
+    if any([x in preurl for x in playlist_ids]):
+        mediatype = "playlist"
+    else:
         mediatype = "video"
 
-    clearconsole()  
+    clearconsole() 
     #Graphics 'n shit makes everything fancy
     title = open("title.ascii", "r", encoding="utf-8")
     divider = open("divider.ascii", "r", encoding="utf-8")
     print(title.read())
     print(divider.read())
-    print("ALPHA 0.1 | A Lot of bugs may occur | Only the Download Option is working through the terminal ;-; |")
-    print("\n1 - Download\n2 - Stream\n3 - Stream")
+    print(f"CLI Version: {cli_version} | Core Version: {main.core_version} | A Lot of bugs may occur |")
+    if mediatype == "video":
+        print("\n1 - Download\n2 - Stream\n3 - Exit")
+    else:
+        print("\n1 - Download\n2 - Exit")
 
 
     i = input("\nSo, what are we doing?\n")
@@ -41,7 +49,7 @@ def cli_main():
                 if ic == "Y":
                     print("Enjoy! Press Ctrl+C to stop or wait until the end :D")
                     print(f"Playing {Filename}")
-                    os.system(f"ffplay {Filename} -nodisp -loglevel quiet -autoexit")
+                    os.system(f"start ffplay {Filename} -nodisp -loglevel quiet -autoexit")
         else:
             if "playlist" in preurl:
                 main.PlaylistDownload(playlist,False)
@@ -55,6 +63,18 @@ def cli_main():
             print("\nGoodbye!")
             pass
         
+    if i == "2":
+        if "playlist" in preurl:
+            print("Sorry but this funcion is only avaiable for videos!")
+            cli_main()
+        else:
+            url = preurl
+            ic = input("Do you want to stream the video as well | *UNSTABLE* | Y/N | ")
+            if ic == "Y":
+                main.Stream(url,True)
+            else:
+                main.Stream(url,False)
+
 
 if __name__ == "__main__":
     cli_main()
