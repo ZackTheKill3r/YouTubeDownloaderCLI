@@ -9,7 +9,13 @@ import re
 
 #url = "https://www.youtube.com/watch?v=cyq5-StPISU"
 root = os.path.dirname(__file__)
+core_version="Alpha 0.3.0"
 
+def yt_title_converter(title):
+    safe_title = ""
+    safe_title = re.sub('[(){}<>/|*;:?×]', ' ', safe_title)
+    return safe_title
+    
 def Captions(url,makefile,filename=type(None),language=type(None)):
     yt = YouTube(url)
     if language == type(None):
@@ -33,6 +39,8 @@ def Download(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguage="e
         ts = time.perf_counter()
         if Filename == type(None):
             Filename=f"{yt.title}.mp3"
+            Filename=yt_title_converter(title=Filename)
+        Filename=yt_title_converter(title=Filename)
         stream.download(filename=Filename,output_path=f"{root}/Downloads")
         tf = time.perf_counter()
         print(f"Done in {tf - ts:0.4f} seconds!")
@@ -40,7 +48,9 @@ def Download(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguage="e
         stream = yt.streams.get_highest_resolution()
         ts = time.perf_counter()
         if Filename == type(None):
-            Filename=f"{yt.title}.mp4"
+            Filename=f"{yt.title}.mp3"
+            Filename=yt_title_converter(title=Filename)
+        Filename=yt_title_converter(title=Filename)
         print(f"{math_stuff.HumanBytes.format(stream.filesize_approx)} | Will now be downloaded!")
         stream.download(filename=Filename,output_path=f"{root}/Downloads")
         tf = time.perf_counter()
@@ -54,7 +64,7 @@ def Stream(url,VideoBeta=type(None)):
 
         with youtube_dl.YoutubeDL(ydl_options) as ydl:
             info = ydl.extract_info(url, download=False)
-            url2 = info['formats'][0]['url'] # This is not working well with playlists... but who the hell is going to stream playlists outta this crap!?
+            url2 = info['formats'][6]['url'] # This is not working well with playlists... but who the hell is going to stream playlists outta this crap!?
             os.system(f"""youtube-dl "{url}" -o - | ffplay - -autoexit""")
     else:
         print("Loading...")
@@ -70,7 +80,8 @@ def PlaylistDownload(playlist, SoundOnly=False):
     print(f"Downloading: {p.title}")
     if SoundOnly == True:
         for video in p.videos:
-            video.streams.get_highest_resolution().download(filename=f"{video.title}.mp3",output_path=f"{root}/Downloads") #For any dumb reason this is only working with getting the highest resolution video and turning it into mp3, no idea why
+            video.streams.get_audio_only().download(filename=f"{video.title}.mp3",output_path=f"{root}/Downloads")
+            # video.streams.get_highest_resolution().download(filename=f"{video.title}.mp3",output_path=f"{root}/Downloads") #For any dumb reason this is only working with getting the highest resolution video and turning it into mp3, no idea why
     else:
         for video in p.videos:
             video.streams.get_highest_resolution().download(filename=f"{video.title}.mp4",output_path=f"{root}/Downloads")
@@ -80,7 +91,7 @@ def PlaylistDownload(playlist, SoundOnly=False):
 
 #Download(url="https://www.youtube.com/watch?v=Qp3b-RXtz4w", AudioOnly=True)
 #Captions(url, True)
-#Stream(url)
+#Stream(url="https://www.youtube.com/watch?v=zcgoi61B5D8&list=PLaxauk3chSWizBh8KxPj83Ue03qy0A_Xv",VideoBeta=True,Playlist=True)
 #PlaylistDownload()
 
 #Made with <3 by ZackTheKill3r using pytube(to gather info and do 99% of the stuff), ffmpeg(used for playing the streaming), youtube_dl(used for streaming) and HumanBytes(used to transform bytes to easily human readable numbers)
