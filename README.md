@@ -33,7 +33,8 @@ Either install one of the releases, or clone the repository and run ```pip insta
 # [FFMPEG](https://ffmpeg.org/download.html) (Optional!)
 
 If you're thinking about using the streaming features download ffmpeg for your OS, it's a awesome small and lightweight player.
-if you're downloading from the releases you shold already have it on folder ready to go!
+
+If you're downloading from the releases you shold already have it on folder ready to go!
 
 # [Pytube](https://github.com/pytube/pytube)
 
