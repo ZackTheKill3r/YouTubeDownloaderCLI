@@ -26,12 +26,16 @@ A Console based app to Download and Stream YouTube content.
 - **Streaming** 
   - Audio/Video is now possibe, although woudn't recomend the video one since it's in a quite rough shape.
 
+# Installation
+Either install one of the releases, or clone the repository and run ```pip install -r requirements.txt``` to install all the necessary modules and be sure to install FFMPEG in the root folder of the clone and you're good to go! To update it, just replace the files with the new ones.
+
 # [FFMPEG](https://ffmpeg.org/download.html)
 If you're thinking about using it as a .py file or building it youself, you'll have to download FFMPEG and leave at the root folder of the app.
 
 # [Pytube](https://github.com/pytube/pytube)
 
-You'll also need Pytube but don't worry! We included it on the requirements.txt so you'll just have to use: ```pip install -r requirements.txt```
+Litterally what this project is mostly built on! It's simple to use and has a lot of cool functions!
+You'll also need Pytube but don't worry! We included it on the requirements.txt so you'll just have to use: 
 
 # [Youtube_dl](https://github.com/ytdl-org/youtube-dl)
 
