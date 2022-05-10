@@ -32,7 +32,6 @@ If you're thinking about using it as a .py file or building it youself, you'll h
 # [Pytube](https://github.com/pytube/pytube)
 
 You'll also need Pytube but don't worry! We included it on the requirements.txt so you'll just have to use: ```pip install -r requirements.txt```
-https://github.com/pytube/pytube
 
 # [Youtube_dl](https://github.com/ytdl-org/youtube-dl)
 
