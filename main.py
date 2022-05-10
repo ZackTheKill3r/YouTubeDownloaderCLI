@@ -1,4 +1,3 @@
-from msilib.schema import File
 import pytube
 from pytube import YouTube
 from pytube import Playlist
