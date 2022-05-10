@@ -1,3 +1,4 @@
+from msilib.schema import File
 import pytube
 from pytube import YouTube
 from pytube import Playlist
@@ -12,8 +13,8 @@ root = os.path.dirname(__file__)
 core_version="Alpha 0.3.0"
 
 def yt_title_converter(title):
-    safe_title = ""
-    safe_title = re.sub('[(){}<>/|*;:?×]', ' ', safe_title)
+    safe_title = title
+    safe_title = re.sub('[(){}<>/|*;:?]', ' ', safe_title)
     return safe_title
     
 def Captions(url,makefile,filename=type(None),language=type(None)):
@@ -38,9 +39,8 @@ def Download(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguage="e
         print(f"{math_stuff.HumanBytes.format(stream.filesize_approx)} | Will now be downloaded!")
         ts = time.perf_counter()
         if Filename == type(None):
-            Filename=f"{yt.title}.mp3"
-            Filename=yt_title_converter(title=Filename)
-        Filename=yt_title_converter(title=Filename)
+            Filename=f"{yt.title}"
+            Filename=f"{yt_title_converter(title=Filename)}.mp3"
         stream.download(filename=Filename,output_path=f"{root}/Downloads")
         tf = time.perf_counter()
         print(f"Done in {tf - ts:0.4f} seconds!")
@@ -48,9 +48,8 @@ def Download(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguage="e
         stream = yt.streams.get_highest_resolution()
         ts = time.perf_counter()
         if Filename == type(None):
-            Filename=f"{yt.title}.mp3"
-            Filename=yt_title_converter(title=Filename)
-        Filename=yt_title_converter(title=Filename)
+            Filename=f"{yt.title}"
+            Filename=f"{yt_title_converter(Filename)}.mp4"
         print(f"{math_stuff.HumanBytes.format(stream.filesize_approx)} | Will now be downloaded!")
         stream.download(filename=Filename,output_path=f"{root}/Downloads")
         tf = time.perf_counter()
