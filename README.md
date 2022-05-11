@@ -39,7 +39,7 @@ If you're downloading from the releases you shold already have it on folder read
 # [Pytube](https://github.com/pytube/pytube)
 
 Litterally what this project is mostly built on! It's simple to use and has a lot of cool functions!
-You'll also need Pytube but don't worry! We included it on the requirements.txt so you'll just have to use: 
+You'll also need Pytube but don't worry! We included it on the requirements.txt so you'll just have to run: ```pip install -r requirements.txt```
 
 # [Youtube_dl](https://github.com/ytdl-org/youtube-dl)
 
