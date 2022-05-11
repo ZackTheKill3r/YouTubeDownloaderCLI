@@ -1,3 +1,4 @@
+from msilib.schema import File
 import pytube
 from pytube import YouTube
 from pytube import Playlist
@@ -9,11 +10,12 @@ import re
 
 #url = "https://www.youtube.com/watch?v=cyq5-StPISU"
 root = os.path.dirname(__file__)
-core_version="Alpha 0.3.0"
+core_version="Alpha 0.4.0"
 
-def yt_title_converter(title):
+def yt_title_converter(title): # This makes sure the filename doesn't piss the OS and also Python off
     safe_title = title
     safe_title = re.sub('[(){}<>/|*;:?]', ' ', safe_title)
+    safe_title = safe_title.replace('"', '')
     return safe_title
     
 def Captions(url,makefile,filename=type(None),language=type(None)):
@@ -78,11 +80,13 @@ def PlaylistDownload(playlist, SoundOnly=False):
     print(f"Downloading: {p.title}")
     if SoundOnly == True:
         for video in p.videos:
-            video.streams.get_audio_only().download(filename=f"{video.title}.mp3",output_path=f"{root}/Downloads")
+            safe_title = yt_title_converter(video.title) # Forgot to add this oops
+            video.streams.get_audio_only().download(filename=f"{safe_title}.mp3",output_path=f"{root}/Downloads")
             # video.streams.get_highest_resolution().download(filename=f"{video.title}.mp3",output_path=f"{root}/Downloads") #For any dumb reason this is only working with getting the highest resolution video and turning it into mp3, no idea why
     else:
         for video in p.videos:
-            video.streams.get_highest_resolution().download(filename=f"{video.title}.mp4",output_path=f"{root}/Downloads")
+            safe_title = yt_title_converter(video.title)
+            video.streams.get_highest_resolution().download(filename=f"{safe_title}.mp4",output_path=f"{root}/Downloads")
         
         
 
