@@ -15,7 +15,7 @@ core_version="Alpha 0.4.0"
 def yt_title_converter(title): # This makes sure the filename doesn't piss the OS and also Python off
     safe_title = title
     safe_title = re.sub('[(){}<>/|*;:?]', ' ', safe_title)
-    safe_title = safe_title.replace('"', '')
+    safe_title = safe_title.replace('"', "'")
     return safe_title
     
 def Captions(url,makefile,filename=type(None),language=type(None)):
