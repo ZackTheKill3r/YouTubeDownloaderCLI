@@ -3,10 +3,11 @@ import os
 import pytube
 from pytube import YouTube
 
-cli_version="Alpha 0.3.0"
+cli_version="Alpha 0.4.0"
 
 def clearconsole():
-    os.system("cls")
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def cli_main():
     clearconsole()
     preurl = input("\nInsert a Youtube Link!\n")
@@ -44,7 +45,7 @@ def cli_main():
             if "video" in mediatype:
                 mediatype = "video"
                 url = preurl
-                Filename = main.Download(url=url, AudioOnly=True)
+                Filename = main.AutoDownload(url=url, AudioOnly=True)
                 ic = input("\nYour music is Ready! do you want to play it now? | Y/N | ")
                 if ic == "Y":
                     print("Enjoy! Press Ctrl+C to stop or wait until the end :D")
@@ -55,7 +56,11 @@ def cli_main():
                 main.PlaylistDownload(playlist,False)
             elif "video" in mediatype:
                 url = preurl
-                main.Download(url,False)
+                ic = input("Do you want to select the quality? | Y/N | ")
+                if ic == "Y":
+                    Filename = main.Download(url=url, AudioOnly=False)
+                else:
+                    Filename = main.AutoDownload(url=url, AudioOnly=False)
         ic = input("\nDo you want to do anything else? | Y/N | ")
         if ic == "Y":
             cli_main()
