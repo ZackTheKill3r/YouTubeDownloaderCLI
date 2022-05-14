@@ -1,4 +1,3 @@
-from msilib.schema import File
 import pytube
 from pytube import YouTube
 from pytube import Playlist
@@ -8,9 +7,11 @@ import youtube_dl
 import time
 import re
 
-#url = "https://www.youtube.com/watch?v=cyq5-StPISU"
+def clearconsole():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 root = os.path.dirname(__file__)
-core_version="Alpha 0.4.0"
+core_version="Alpha 0.5.0"
 
 def yt_title_converter(title): # This makes sure the filename doesn't piss the OS and also Python off
     safe_title = title
@@ -32,7 +33,7 @@ def Captions(url,makefile,filename=type(None),language=type(None)):
         f.close()
     return captions
 
-def Download(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguage="en",Filename=type(None)):
+def AutoDownload(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguage="en",Filename=type(None)):
     yt = YouTube(url)
     if AudioOnly == True:
         stream = yt.streams.get_by_itag(140)
@@ -53,6 +54,60 @@ def Download(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguage="e
             Filename=f"{yt_title_converter(Filename)}.mp4"
         print(f"{math_stuff.HumanBytes.format(stream.filesize_approx)} | Will now be downloaded!")
         stream.download(filename=Filename,output_path=f"{root}/Downloads")
+        tf = time.perf_counter()
+        print(f"Done in {tf - ts :0.4f} seconds!")
+    return Filename
+
+def Download(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguage="en",Filename=type(None)):
+    yt = YouTube(url)
+    if AudioOnly == True:
+        stream = yt.streams.get_by_itag(140)
+        print("Approximate size:")
+        print(f"{math_stuff.HumanBytes.format(stream.filesize_approx)} | Will now be downloaded!")
+        ts = time.perf_counter()
+        if Filename == type(None):
+            Filename=f"{yt.title}"
+            Filename=f"{yt_title_converter(title=Filename)}.mp3"
+        stream.download(filename=Filename,output_path=f"{root}/Downloads")
+        tf = time.perf_counter()
+        print(f"Done in {tf - ts:0.4f} seconds!")
+    else:
+        print("| 144p |")
+        print("| 360p |")
+        print("| 480p |")
+        print("| 720p |")
+        print("| 1080p |")
+        ic = input("Select your desired quality ")
+        if "144" in ic:
+            Uitag=17
+        elif "360" in ic:
+            Uitag=22
+        elif "480" in ic:
+            Uitag=135
+            split = True
+        elif "720" in ic:
+            Uitag=22
+        elif "1080" in ic:
+            Uitag=248
+            split = True
+        else:
+            print("Not avaiable")
+            pass
+        stream = yt.streams.get_by_itag(Uitag)
+        audio = yt.streams.get_by_itag(140)
+        ts = time.perf_counter()
+        if Filename == type(None):
+            Filename=f"{yt.title}"
+            Raw_Filename=f"{yt_title_converter(Filename)} raw.mp4"
+            Filename=f"{yt_title_converter(Filename)}.mp4"
+            audioname=f"{yt_title_converter(Filename)}.mp3"
+        print(f"{math_stuff.HumanBytes.format(stream.filesize_approx + audio.filesize_approx)} | Will now be downloaded!")
+        stream.download(filename=Raw_Filename,output_path=f"{root}/Downloads")
+        if split == True:
+            audio.download(filename=audioname,output_path=f"{root}/Downloads")
+            os.system(f"""ffmpeg -loglevel quiet -y -i "Downloads/{Raw_Filename}" -i "Downloads/{audioname}" -c:v copy -c:a aac "Downloads/{Filename}" """)
+            os.remove(f"{root}/Downloads/{Raw_Filename}")
+            os.remove(f"{root}/Downloads/{audioname}")
         tf = time.perf_counter()
         print(f"Done in {tf - ts :0.4f} seconds!")
     return Filename
@@ -92,6 +147,7 @@ def PlaylistDownload(playlist, SoundOnly=False):
 
 
 #Download(url="https://www.youtube.com/watch?v=Qp3b-RXtz4w", AudioOnly=True)
+#Download(url="https://www.youtube.com/watch?v=VY8pupVRbcc", AudioOnly=True)
 #Captions(url, True)
 #Stream(url="https://www.youtube.com/watch?v=zcgoi61B5D8&list=PLaxauk3chSWizBh8KxPj83Ue03qy0A_Xv",VideoBeta=True,Playlist=True)
 #PlaylistDownload()
