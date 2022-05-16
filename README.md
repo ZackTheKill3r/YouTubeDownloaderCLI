@@ -14,7 +14,7 @@ A Console based app to Download and Stream YouTube content.
 
 # Features
 - **Fast Downloads**
-  -  Although it doesn't have a good mp4 quality it sure does compensate on the spped.
+  -  You can either let YDC choose a balanced preset between speed and quality, or you can choose your preferred quality, eitherway it should be really quick.
 - **Playlist Downloads**
   - You can download entire playlists, go ahead it's quite fun.
 - **A Good lookin' CLI Interface**
