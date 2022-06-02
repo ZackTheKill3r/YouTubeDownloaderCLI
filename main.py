@@ -1,4 +1,3 @@
-import pytube
 from pytube import YouTube
 from pytube import Playlist
 import math_stuff
@@ -10,8 +9,10 @@ import re
 def clearconsole():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-root = os.path.dirname(__file__)
-core_version="Alpha 0.5.0"
+
+root = os.path.dirname(__file__) 
+core_version="Alpha 0.5.1"
+
 
 def yt_title_converter(title): # This makes sure the filename doesn't piss the OS and also Python off
     safe_title = title
@@ -19,7 +20,7 @@ def yt_title_converter(title): # This makes sure the filename doesn't piss the O
     safe_title = safe_title.replace('"', "'")
     return safe_title
     
-def Captions(url,makefile,filename=type(None),language=type(None)):
+def Captions(url,makefile,filename=type(None),language=type(None)): #Downloads Captions
     yt = YouTube(url)
     if language == type(None):
         language = "en"
@@ -33,7 +34,7 @@ def Captions(url,makefile,filename=type(None),language=type(None)):
         f.close()
     return captions
 
-def AutoDownload(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguage="en",Filename=type(None)):
+def AutoDownload(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguage="en",Filename=type(None)): #Downloads without asking for quality
     yt = YouTube(url)
     if AudioOnly == True:
         stream = yt.streams.get_by_itag(140)
@@ -58,7 +59,7 @@ def AutoDownload(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguag
         print(f"Done in {tf - ts :0.4f} seconds!")
     return Filename
 
-def Download(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguage="en",Filename=type(None)):
+def Download(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguage="en",Filename=type(None)): #Regular Download (Asks for quality)
     yt = YouTube(url)
     if AudioOnly == True:
         stream = yt.streams.get_by_itag(140)
@@ -91,8 +92,8 @@ def Download(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguage="e
             Uitag=248
             split = True
         else:
-            print("Not avaiable")
-            pass
+            print("Not avaiable | Error Code: Err1nQ |")
+            return "Err1NQ"
         stream = yt.streams.get_by_itag(Uitag)
         audio = yt.streams.get_by_itag(140)
         ts = time.perf_counter()
@@ -105,14 +106,14 @@ def Download(url,AudioOnly=type(None),UseCaptions=type(None),CaptionsLanguage="e
         stream.download(filename=Raw_Filename,output_path=f"{root}/Downloads")
         if split == True:
             audio.download(filename=audioname,output_path=f"{root}/Downloads")
-            os.system(f"""ffmpeg -loglevel quiet -y -i "Downloads/{Raw_Filename}" -i "Downloads/{audioname}" -c:v copy -c:a aac "Downloads/{Filename}" """)
-            os.remove(f"{root}/Downloads/{Raw_Filename}")
-            os.remove(f"{root}/Downloads/{audioname}")
+            os.system(f"""ffmpeg -loglevel quiet -y -i "Downloads/{Raw_Filename}" -i "Downloads/{audioname}" -c:v copy -c:a aac "Downloads/{Filename}" """) #Calls ffmpeg to mix the audio and video together
+            os.remove(f"{root}/Downloads/{Raw_Filename}") #Deletes the mute videofile
+            os.remove(f"{root}/Downloads/{audioname}") #Deletes the audiofile
         tf = time.perf_counter()
         print(f"Done in {tf - ts :0.4f} seconds!")
     return Filename
 
-def Stream(url,VideoBeta=type(None)):
+def Stream(url,VideoBeta=type(None)): #Video/Audio Streaming
     if VideoBeta == True:
         print("|WARNING|\n The video option is very unstable, as it's still on development\nTrust me I'm trying my best ¯\_(ツ)_/¯\n also... it has a shitty quality :D ENJOY!")
         ydl_options = {"format":"bestvideo"}
@@ -130,26 +131,17 @@ def Stream(url,VideoBeta=type(None)):
             print("OK! Enjoy your music!")
             os.system(f"""ffplay "{url2}" -nodisp -autoexit""")
 
-def PlaylistDownload(playlist, SoundOnly=False):
+def PlaylistDownload(playlist, SoundOnly=False): #Downloads playlists using the AutoDownload Method
     p = Playlist(playlist)
     print(f"Downloading: {p.title}")
     if SoundOnly == True:
         for video in p.videos:
             safe_title = yt_title_converter(video.title) # Forgot to add this oops
             video.streams.get_audio_only().download(filename=f"{safe_title}.mp3",output_path=f"{root}/Downloads")
-            # video.streams.get_highest_resolution().download(filename=f"{video.title}.mp3",output_path=f"{root}/Downloads") #For any dumb reason this is only working with getting the highest resolution video and turning it into mp3, no idea why
     else:
         for video in p.videos:
             safe_title = yt_title_converter(video.title)
             video.streams.get_highest_resolution().download(filename=f"{safe_title}.mp4",output_path=f"{root}/Downloads")
-        
-        
 
-
-#Download(url="https://www.youtube.com/watch?v=Qp3b-RXtz4w", AudioOnly=True)
-#Download(url="https://www.youtube.com/watch?v=VY8pupVRbcc", AudioOnly=True)
-#Captions(url, True)
-#Stream(url="https://www.youtube.com/watch?v=zcgoi61B5D8&list=PLaxauk3chSWizBh8KxPj83Ue03qy0A_Xv",VideoBeta=True,Playlist=True)
-#PlaylistDownload()
 
 #Made with <3 by ZackTheKill3r using pytube(to gather info and do 99% of the stuff), ffmpeg(used for playing the streaming), youtube_dl(used for streaming) and HumanBytes(used to transform bytes to easily human readable numbers)
