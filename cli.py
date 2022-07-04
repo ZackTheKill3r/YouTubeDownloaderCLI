@@ -2,15 +2,23 @@ import main
 import os
 import pytube
 from pytube import YouTube
+from settings import language
 
-cli_version="Alpha 0.4.0"
+if language == "English":
+    from Languages.english import *
+elif language == "Portuguese":
+    from Languages.portuguese import *
+elif language == "Japanese":
+    from Languages.japanese import *
+
+cli_version="Alpha 0.5.0"
 
 def clearconsole():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def cli_main():
     clearconsole()
-    preurl = input("\nInsert a Youtube Link!\n")
+    preurl = input(CLI[0])
     playlist = ""
     url = ""
     
@@ -26,17 +34,19 @@ def cli_main():
     divider = open("divider.ascii", "r", encoding="utf-8")
     print(title.read())
     print(divider.read())
-    print(f"CLI Version: {cli_version} | Core Version: {main.core_version} | A Lot of bugs may occur |")
+    version_header = CLI[1].replace("/cli_version",f"{cli_version}")
+    version_header = version_header.replace("/core_version",f"{main.core_version}")
+    print(version_header)
     if mediatype == "video":
-        print("\n1 - Download\n2 - Stream\n3 - Exit")
+        print(CLI[2])
     else:
-        print("\n1 - Download\n2 - Exit")
+        print(CLI[3])
 
 
-    i = input("\nSo, what are we doing?\n")
+    i = input(CLI[4])
 
     if i == "1":
-        ic = input("Do you want to Download only the sound? | Y/N | ")
+        ic = input(CLI[5])
         if ic == "Y":       
             if "playlist" in preurl:
                 mediatype = "playlist"
@@ -46,35 +56,36 @@ def cli_main():
                 mediatype = "video"
                 url = preurl
                 Filename = main.AutoDownload(url=url, AudioOnly=True)
-                ic = input("\nYour music is Ready! do you want to play it now? | Y/N | ")
+                ic = input(CLI[6])
                 if ic == "Y":
-                    print("Enjoy! Press Ctrl+C to stop or wait until the end :D")
-                    print(f"Playing {Filename}")
+                    print(CLI[7])
+                    playing = CLI[8].replace("/p",f"{Filename}")
+                    print(CLI[8])
                     os.system(f"start ffplay {Filename} -nodisp -loglevel quiet -autoexit")
         else:
             if "playlist" in preurl:
                 main.PlaylistDownload(playlist,False)
             elif "video" in mediatype:
                 url = preurl
-                ic = input("Do you want to select the quality? | Y/N | ")
+                ic = input(CLI[9])
                 if ic == "Y":
                     Filename = main.Download(url=url, AudioOnly=False)
                 else:
                     Filename = main.AutoDownload(url=url, AudioOnly=False)
-        ic = input("\nDo you want to do anything else? | Y/N | ")
+        ic = input(CLI[10])
         if ic == "Y":
             cli_main()
         else:
-            print("\nGoodbye!")
+            print(CLI[11])
             pass
         
     if i == "2":
         if "playlist" in preurl:
-            print("Sorry but this funcion is only avaiable for videos!")
+            print(CLI[12])
             cli_main()
         else:
             url = preurl
-            ic = input("Do you want to stream the video as well | *UNSTABLE* | Y/N | ")
+            ic = input(CLI[13])
             if ic == "Y":
                 main.Stream(url,True)
             else:
